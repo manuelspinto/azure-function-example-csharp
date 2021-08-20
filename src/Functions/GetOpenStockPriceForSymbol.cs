@@ -30,9 +30,21 @@ namespace Example.Function
             var logger = executionContext.GetLogger("GetOpenStockPriceForSymbol");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
+            var openPrice = GetOpenStockPriceForSymbolAsync(symbol);
+            HttpResponseData response = await CreateHttpResponse(req, openPrice);
+
+            return response;
+        }
+
+        private async Task<decimal> GetOpenStockPriceForSymbolAsync(string symbol){
             var stockData = await _stockDataProvider.GetStockDataForSymbolAsync(symbol);
             var openPrice = stockData.Open;
 
+            return openPrice;
+        }
+
+        private static async Task<HttpResponseData> CreateHttpResponse(HttpRequestData req, Task<decimal> openPrice)
+        {
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(openPrice);
 
