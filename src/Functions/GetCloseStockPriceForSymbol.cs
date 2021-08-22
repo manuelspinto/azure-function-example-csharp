@@ -9,24 +9,24 @@ using Function.Domain.Helpers;
 
 namespace Example.Function
 {
-    public class GetOpenStockPriceForSymbol
+    public class GetCloseStockPriceForSymbol
     {
         private readonly IStockDataProvider _stockDataProvider;
         private readonly IHttpHelper _httpHelper;
 
-        public GetOpenStockPriceForSymbol(
+        public GetCloseStockPriceForSymbol(
                 IStockDataProvider stockDataProvider,
                 IHttpHelper httpHelper){
                     _stockDataProvider = stockDataProvider;
                     _httpHelper = httpHelper;
         }
         
-        [Function("GetOpenStockPriceForSymbol")]
+        [Function("GetCloseStockPriceForSymbol")]
         public async Task<HttpResponseData> Run(
             [HttpTrigger(
                 AuthorizationLevel.Anonymous,
                 "get", 
-                Route = "stock-price/open/{symbol}"
+                Route = "stock-price/close/{symbol}"
             )] HttpRequestData req,
             string symbol,
             FunctionContext executionContext)
@@ -34,13 +34,13 @@ namespace Example.Function
             var logger = executionContext.GetLogger("GetOpenStockPriceForSymbol");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var openPrice = GetOpenStockPriceForSymbolAsync(symbol);
-            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, openPrice);
+            var closePrice = GetCloseStockPriceForSymbolAsync(symbol);
+            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, closePrice);
 
             return response;
         }
 
-        private async Task<decimal> GetOpenStockPriceForSymbolAsync(string symbol){
+        private async Task<decimal> GetCloseStockPriceForSymbolAsync(string symbol){
             var stockData = await _stockDataProvider.GetStockDataForSymbolAsync(symbol);
             var openPrice = stockData.Open;
 
