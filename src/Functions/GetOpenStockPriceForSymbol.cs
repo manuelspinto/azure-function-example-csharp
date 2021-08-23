@@ -34,9 +34,9 @@ namespace Example.Function
             var logger = executionContext.GetLogger("GetOpenStockPriceForSymbol");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var openPrice = GetOpenStockPriceForSymbolAsync(symbol);
-            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, openPrice);
+            var openPrice = GetOpenStockPriceForSymbolAsync(symbol).Result;
 
+            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, openPrice);
             return response;
         }
 

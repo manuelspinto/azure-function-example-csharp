@@ -31,20 +31,20 @@ namespace Example.Function
             string symbol,
             FunctionContext executionContext)
         {
-            var logger = executionContext.GetLogger("GetOpenStockPriceForSymbol");
+            var logger = executionContext.GetLogger("GetCloseStockPriceForSymbol");
             logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var closePrice = GetCloseStockPriceForSymbolAsync(symbol);
-            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, closePrice);
+            var closePrice = GetCloseStockPriceForSymbolAsync(symbol).Result;
 
+            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, closePrice);
             return response;
         }
 
         private async Task<decimal> GetCloseStockPriceForSymbolAsync(string symbol){
             var stockData = await _stockDataProvider.GetStockDataForSymbolAsync(symbol);
-            var openPrice = stockData.Open;
+            var closePrice = stockData.PreviousClose;
 
-            return openPrice;
+            return closePrice;
         }
     }
 }
