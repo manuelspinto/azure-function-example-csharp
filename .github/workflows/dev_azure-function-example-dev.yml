@@ -38,5 +38,5 @@ jobs:
         with:
           app-name: 'azure-function-example-dev'
           slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8D5E1F78281041FBB15518CB99445211 }}
