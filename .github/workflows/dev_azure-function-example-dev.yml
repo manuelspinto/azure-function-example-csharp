@@ -33,10 +33,11 @@ jobs:
           popd
       
       - name: Test
-      run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tests/unit-tests'
-        dotnet test --no-build --verbosity normal
-        popd
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tests/unit-tests'
+          dotnet test --no-build --verbosity normal
+          popd
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
