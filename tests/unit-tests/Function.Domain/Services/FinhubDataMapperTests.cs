@@ -29,7 +29,7 @@ namespace UnitTests.Function.Domain.Services
             Assert.Equal(222.2M, result.High);
             Assert.Equal(333.3M, result.Low);
             Assert.Equal(444.4M, result.Current);
-            Assert.Equal(555.6M, result.PreviousClose);
+            Assert.Equal(555.5M, result.PreviousClose);
         }
     }
 }
