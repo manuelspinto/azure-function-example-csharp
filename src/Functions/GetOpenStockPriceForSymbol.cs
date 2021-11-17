@@ -1,43 +1,44 @@
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Net;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
+
 using Function.Domain.Providers;
-using Function.Domain.Helpers;
 
 namespace Example.Function
 {
     public class GetOpenStockPriceForSymbol
     {
         private readonly IStockDataProvider _stockDataProvider;
-        private readonly IHttpHelper _httpHelper;
+        private readonly ILogger<GetOpenStockPriceForSymbol> _logger;
 
         public GetOpenStockPriceForSymbol(
-                IStockDataProvider stockDataProvider,
-                IHttpHelper httpHelper){
-                    _stockDataProvider = stockDataProvider;
-                    _httpHelper = httpHelper;
+                    IStockDataProvider stockDataProvider,
+                    ILogger<GetOpenStockPriceForSymbol> logger){
+                _stockDataProvider = stockDataProvider;
+                _logger = logger;
         }
         
-        [Function("GetOpenStockPriceForSymbol")]
-        public async Task<HttpResponseData> Run(
+        [FunctionName("GetOpenStockPriceForSymbol")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "name"})]
+        [OpenApiParameter(name: "symbol", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Symbol to get stock data from")]
+        public async Task<IActionResult> Run(
             [HttpTrigger(
                 AuthorizationLevel.Anonymous,
                 "get", 
                 Route = "stock-price/open/{symbol}"
-            )] HttpRequestData req,
-            string symbol,
-            FunctionContext executionContext)
+            )] HttpRequest req,
+            string symbol)
         {
-            var logger = executionContext.GetLogger("GetOpenStockPriceForSymbol");
-            logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var openPrice = GetOpenStockPriceForSymbolAsync(symbol).Result;
+            var openPrice = await GetOpenStockPriceForSymbolAsync(symbol);
 
-            HttpResponseData response = await _httpHelper.CreateHttpResponse(req, openPrice);
-            return response;
+            return new OkObjectResult(openPrice);
         }
 
         private async Task<decimal> GetOpenStockPriceForSymbolAsync(string symbol){

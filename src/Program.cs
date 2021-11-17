@@ -1,11 +1,7 @@
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Azure.Functions.Worker.Configuration;
 using Function.Domain.Services;
 using Function.Domain.Services.HttpClients;
 using Function.Domain.Providers;
-using Function.Domain.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Example.Function
@@ -20,7 +16,6 @@ namespace Example.Function
                 {
                     s.AddScoped<IFinhubDataMapper, FinhubDataMapper>();
                     s.AddScoped<IStockDataProvider, FinhubProvider>();
-                    s.AddScoped<IHttpHelper, HttpHelper>();
                     s.AddHttpClient<FinhubHttpClient>();
                 })
                 .Build();
