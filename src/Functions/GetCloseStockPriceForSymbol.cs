@@ -25,24 +25,24 @@ namespace Example.Function
         
         [Function("GetCloseStockPriceForSymbol")]
         [OpenApiOperation(operationId: "Run", tags: new[] { "symbol"})]
-        [OpenApiParameter(name: "symbol", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Symbol to get stock data from")]
+        [OpenApiParameter(name: "symbol", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Symbol to get stock data from")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "OK response")]
         public async Task<IActionResult> Run(
             [Microsoft.Azure.Functions.Worker.HttpTrigger(
                 AuthorizationLevel.Anonymous,
                 "get", 
-                Route = "stock-price/close/{symbol}"
-            )] HttpRequest req,
+                Route = "stock-price/symbol/{symbol:alpha}/close"
+            )] Microsoft.Azure.Functions.Worker.Http.HttpRequestData req,
             string symbol)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation($"Getting previous close stock price for symbol: {symbol}");
 
-            var openPrice = await GetOpenStockPriceForSymbolAsync(symbol);
+            var closePrice = await GetCloseStockPriceForSymbolAsync(symbol);
             
-            return new OkObjectResult(openPrice);
+            return new OkObjectResult(closePrice);
         }
 
-        private async Task<decimal> GetOpenStockPriceForSymbolAsync(string symbol){
+        private async Task<decimal> GetCloseStockPriceForSymbolAsync(string symbol){
             var stockData = await _stockDataProvider.GetStockDataForSymbolAsync(symbol);
             var openPrice = stockData.PreviousClose;
 
