@@ -3,6 +3,7 @@ using Function.Domain.Services;
 using Function.Domain.Services.HttpClients;
 using Function.Domain.Providers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 
 namespace Example.Function
 {
@@ -11,7 +12,8 @@ namespace Example.Function
         public static void Main()
         {
             var host = new HostBuilder()
-                .ConfigureFunctionsWorkerDefaults()
+                .ConfigureFunctionsWorkerDefaults(worker => worker.UseNewtonsoftJson())
+                .ConfigureOpenApi()
                 .ConfigureServices(s =>
                 {
                     s.AddScoped<IFinhubDataMapper, FinhubDataMapper>();

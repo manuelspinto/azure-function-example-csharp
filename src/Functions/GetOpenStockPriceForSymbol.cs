@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Logging;
+using System.Net;
 
 using Function.Domain.Providers;
 
@@ -23,11 +23,12 @@ namespace Example.Function
                 _logger = logger;
         }
         
-        [FunctionName("GetOpenStockPriceForSymbol")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "name"})]
+        [Function("GetOpenStockPriceForSymbol")]
+        [OpenApiOperation(operationId: "Run", tags: new[] { "symbol"})]
         [OpenApiParameter(name: "symbol", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "Symbol to get stock data from")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "OK response")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(
+            [Microsoft.Azure.Functions.Worker.HttpTrigger(
                 AuthorizationLevel.Anonymous,
                 "get", 
                 Route = "stock-price/open/{symbol}"
