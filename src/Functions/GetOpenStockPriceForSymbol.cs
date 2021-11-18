@@ -31,7 +31,7 @@ namespace Example.Function
             [Microsoft.Azure.Functions.Worker.HttpTrigger(
                 AuthorizationLevel.Anonymous,
                 "get", 
-                Route = "stock-price/symbol/{symbol}/open"
+                Route = "stock-price/symbol/{symbol:alpha}/open"
             )] Microsoft.Azure.Functions.Worker.Http.HttpRequestData req,
             string symbol)
         {
