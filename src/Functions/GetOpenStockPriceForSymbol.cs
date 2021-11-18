@@ -32,7 +32,7 @@ namespace Example.Function
                 AuthorizationLevel.Anonymous,
                 "get", 
                 Route = "stock-price/symbol/{symbol}/open"
-            )] HttpRequest req,
+            )] Microsoft.Azure.Functions.Worker.Http.HttpRequestData req,
             string symbol)
         {
             _logger.LogInformation($"Getting previous close stock price for symbol: {symbol}");
