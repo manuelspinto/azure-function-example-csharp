@@ -29,7 +29,7 @@ namespace Example.Function
         }
         
         [Function("GetOpenStockPriceForSymbol")]
-        [OpenApiOperation(operationId: "Run", tags: new[] { "symbol"})]
+        [OpenApiOperation(operationId: "GetOpenStockPriceForSymbol", tags: new[] { "stock-price/symbol"})]
         [OpenApiParameter(name: "symbol", In = ParameterLocation.Path, Required = true, Type = typeof(string), Description = "Symbol to get stock data from")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "OK response")]
         public async Task<HttpResponseData> Run(
