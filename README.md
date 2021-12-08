@@ -6,7 +6,7 @@ Sample azure function project to illustrate concepts like
 * Dependency Injection
 * Unit Tests
 
-The complete walkthrough of the code is the aim of the [Medium article](https://medium.com/@manuelspinto/create-a-complete-azure-function-project-in-net-5-using-vscode-97c050bd02a2)
+The complete walkthrough of the code is the aim of the [Medium article](https://medium.com/@manuelspinto/create-a-complete-azure-function-project-in-net-6-and-af-v4-bd1cc714452c)
 
 ### Technology used:
 * Azure Functions version: **v4** 
