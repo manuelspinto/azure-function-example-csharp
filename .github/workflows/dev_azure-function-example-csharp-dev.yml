@@ -28,8 +28,15 @@ jobs:
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: pwsh
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src'
           dotnet build --configuration Release --output ./output
+          popd
+
+      - name: Test
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tests/unit-tests'
+          dotnet test
           popd
 
       - name: 'Run Azure Functions Action'
@@ -38,5 +45,5 @@ jobs:
         with:
           app-name: 'azure-function-example-csharp-dev'
           slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8D668527930F4E5ABF6E50D092AB8BA5 }}
